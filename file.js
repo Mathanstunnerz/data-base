@@ -19,7 +19,7 @@
 //read file
 const fs =require("fs")
 const [,,val] = process.argv
-// 
+// wi
 getfile(val)
 
 function getfile(val){
