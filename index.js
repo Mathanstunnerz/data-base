@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
-
+import moviesRouter from "./router/moviesrouter.js"
 // const express = require("express");
 // const app = express();
 // const express = require("express"); // "type": "commonjs"
@@ -10,7 +10,7 @@ const app = express();
 // const MONGO_URL = "mongodb://127.0.0.1";
 const MONGO_URL = process.env.MONGO_URL;
 
-const client = new MongoClient(MONGO_URL); // dial
+export const client = new MongoClient(MONGO_URL); // dial
 
 // Top level await
 await client.connect(); // call
@@ -22,60 +22,7 @@ app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩 mathan");
 });
 app.use(express.json()); 
-app.get("/movies", async function (request, response) {
-  //db.movies.find({})
-  //cursor => pagination(20)
-  //cursor => arry (toArray)
-
-  const movies = await client
-    .db("data")
-    .collection("movies")
-    .find({})
-    .toArray();
-
-  response.send(movies);
-});
-// express.json() -middleware
-app.post("/movies", async function (request, response) {
-  const data = request.body;
-
-  const movies = await client.db("data").collection("movies").insertMany(data);
-
-  response.send(movies);
-});
-
-app.delete("/movies/:id", async function (request, response) {
-  const err = "movie not found ";
-  const { id } = request.params;
-  const movie = await client
-    .db("data")
-    .collection("movies")
-    .deleteOne({ id: id });
-    console.log(movie)
-  movie.deletedCount > 1
-  ? response.send(movie) : response.status(404).send("movies not found");
-});
-app.put("/movies/:id", async function (request, response) {
-  //db.movies.updateOne({id:id},{$set:data})
-  const err = "movie not found ";
-  const { id } = request.params;
-  const data = request.body;
-  const movie = await client
-    .db("data")
-    .collection("movies")
-    .updateOne({ id: id },{$set: data})
-    console.log(movie)
-  movie ? response.send(movie) : response.status(404).send("movies not found");
-});
-app.get("/movies/:id", async function (request, response) {
-  const err = "movie not found ";
-  const { id } = request.params;
-  const movie = await client
-    .db("data")
-    .collection("movies")
-    .findOne({ id: id });
-  movie ? response.send(movie) : response.status(404).send("movies not found");
-});
+app.use("/movies",moviesRouter)
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
 
 const movies = [
