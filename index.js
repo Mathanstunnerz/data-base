@@ -17,7 +17,7 @@ await client.connect(); // call
 console.log("Mongo is connected !!!  ");
 
 //http://localhost:4000
-const PORT = 4000;
+const PORT = process.env.PORT;
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩 mathan");
 });
