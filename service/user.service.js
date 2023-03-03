@@ -4,3 +4,15 @@ export function postuser(data) {
     return client.db("data").collection("user").insertOne(data);
   
 }
+export function getusersName(username) {
+    return client
+        .db("data")
+        .collection("user")
+        .findOne({username: username})
+}
+export function loginusersName(username) {
+    return client
+        .db("data")
+        .collection("user")
+        .findOne({username: username})
+}

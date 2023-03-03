@@ -28,3 +28,10 @@ export function getallmovies() {
         .find({})
         .toArray();
 }
+export function getallmovieslogin(query) {
+    return client
+        .db("data")
+        .collection("movies")
+        .find(query)
+        .toArray();
+}

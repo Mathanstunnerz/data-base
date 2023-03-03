@@ -3,7 +3,7 @@ dotenv.config();
 import moviesRouter from "./router/moviesrouter.js";
 import userRouter from "./router/userrouter.js";
 import cors from  "cors";
-
+import {auth} from "./middleware/auth.js"
 // const express = require("express");
 // const app = express();
 // const express = require("express"); // "type": "commonjs"
@@ -28,6 +28,19 @@ app.get("/", function (request, response) {
 app.use(express.json()); 
 app.use("/movies",moviesRouter)
 app.use("/user",userRouter)
+
+//http://localhost:4000/mobiles
+app.get("/mobiles",auth,async function(request, response) {
+  const result = await client.db("data").collection("Mobiledata").find({}).toArray()
+   response.send(result)
+})
+app.post("/Createmobile",async function(request, response) {
+  //db.mobiles.insertMany([{}])
+  const data = request.body
+  const result = await client
+  .db("data").collection("Mobiledata").insertMany(data)
+   response.send(result)
+})
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
 
 // const movies = [

@@ -1,6 +1,7 @@
 
 import express from "express"
-import { getallmovies, postmovie, deletemovie, updatemovie, onemovieget } from "../service/movies.service.js";
+import { getallmovies, postmovie, deletemovie, updatemovie,getallmovieslogin,onemovieget } from "../service/movies.service.js";
+import {auth} from "../middleware/auth.js"
 const router = express.Router();
 
 
@@ -11,6 +12,17 @@ router.get("/", async function (request, response) {
   //cursor => arry (toArray)
 
   const movies = await getallmovies();
+
+  response.send(movies);
+});
+router.get("/login",auth, async function (request, response) {
+  //db.movies.find({})
+  //cursor => pagination(20)
+  //cursor => arry (toArray)
+   if(request.query.rating){
+    request.query.rating = +request.query.rating
+   }
+  const movies = await getallmovieslogin(request.query);
 
   response.send(movies);
 });
